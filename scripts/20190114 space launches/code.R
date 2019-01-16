@@ -18,7 +18,8 @@ plot_data <-
   group_by(country, launch_year) %>% 
   count() 
 
-plot_data %>% 
+p <-
+  plot_data %>% 
   ggplot(aes(launch_year, n)) + 
   geom_bar(aes(fill = country), stat = "identity") +
   scale_x_continuous(breaks = seq(1960, 2010, 10)) +
@@ -26,7 +27,7 @@ plot_data %>%
         panel.grid = element_blank(), 
         text = element_text(colour = "white", 
                             family = "Tw Cen MT Condensed", size = 26), 
-        panel.background = element_rect("#0a1926"), 
+        panel.background = element_rect(fill = "transparent", colour = NA), 
         legend.position = c(0.8,0.9), 
         legend.text = element_text(size = 16), 
         legend.key = element_rect(fill = "transparent", colour = "transparent"),
