@@ -2,6 +2,9 @@ library(tidyverse)
 library(lubridate)
 library(extrafont)
 
+# RUN ONCE, AFTER INSTALLING EXTRAFONT, OR ANY NEW FONTS ON YOUR SYSTEM
+# extrafont::font_import()
+
 launches <-
   "https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-01-15/launches.csv" %>% 
   read_csv()
