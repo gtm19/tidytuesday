@@ -23,3 +23,9 @@ This week was a chance to get my map on. I stuck with what I know and mapped usi
 My most recent [#tidytuesday](https://twitter.com/hashtag/tidytuesday?lang=en) concerned the subjects in which PhDs were awarded in the US since 2007. I was interested which subjects had increased or decreased in popularity in their own right, and was happy to see that the popularity of Mathematics/Statistics was on the up.
 
 <img src="plots/phds.png" alt="Education Education Education" width="80%"/>
+
+# Effort 4 - Female Earnings
+
+A topic I have suprisingly strong opinions about, I created a chart which, with some basic assumptions around the length of an average career, how much longer women across industries would have to work in order to earn as much as their male equivalents:
+
+<img src="plots/gender_gap.png" alt="A woman's work is never done" width="80%"/>

@@ -1,6 +1,5 @@
 library(tidyverse)
 library(lubridate)
-library(ggforce)
 library(janitor)
 library(scales)
 library(here)
@@ -17,8 +16,7 @@ font <- "Open Sans Light"
 boldfont <- "Open Sans"
 
 jobs_gender <-
-  "../R4DS Tidy Tuesday/data/2019/2019-03-05/jobs_gender.csv" %>% 
-  read_csv() %>% 
+  readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-03-05/jobs_gender.csv") %>% 
   clean_names() %>% 
   filter(!is.na(wage_percent_of_male)) %>% 
   filter(year == 2016) %>% 
