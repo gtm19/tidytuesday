@@ -6,7 +6,7 @@ This is a repository to store and showcase my own [Tidy Tuesday](https://github.
 
 This week, the data was a summary of every rocket launch since humans started firing things into space. There was a whole heap of interesting metadata, including things like the agency responsible and the names of the rockets used - which might have lent itself to analysis of famous series of rocket launches like Saturn or Apollo - but I kept things simple with an analysis of launches by country:
 
-<img src="plots/space_races.png" alt="My first Tidy Tuesday" width="80%"style="display:block;margin:auto">
+<img src="plots/space_races.png" alt="My first Tidy Tuesday" width="80%" style="display:block;margin:auto">
 
 <br>
 
