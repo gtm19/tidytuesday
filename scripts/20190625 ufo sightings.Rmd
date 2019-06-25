@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 
 library(tidyverse)
-library(png)
+library(extrafont)
 
 ufo_sightings <- 
   readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-06-25/ufo_sightings.csv") %>% 
@@ -20,21 +20,40 @@ ufo_sightings <-
 
 mccon <- 
   magick::image_read("https://upload.wikimedia.org/wikipedia/en/8/86/McMinnville_UFO_Photograph.jpg") %>% 
-  magick::image_border(color = "white")
+  magick::image_border(color = "white") %>% 
+  magick::image_ggplot() %>% 
+  ggplotGrob()
 
 xfiles <- 
   magick::image_read("https://upload.wikimedia.org/wikipedia/en/e/e1/Thexfiles.jpg") %>% 
-  magick::image_border(color = "white")
+  magick::image_border(color = "white")  %>% 
+  magick::image_ggplot() %>% 
+  ggplotGrob()
 
-ufo_sightings %>% 
-  mutate(ufo_shape = fct_lump(str_to_title(ufo_shape), 8)) %>% 
-  group_by(year = lubridate::year(date_time), ufo_shape) %>% 
+image_df <- tibble(event = c("McMinnville UFO Photograph published", "X Files Premieres"),
+                   date = lubridate::dmy(c(26061950, 10091983)))
+
+baseplot <- 
+  ufo_sightings %>%  
+  group_by(year = lubridate::floor_date(date_time, "year")) %>% 
   summarise(sightings = n()) %>% 
   ggplot(aes(year, sightings)) + 
-  geom_col() + 
-  geom_vline(xintercept = c(1950.5, 1993.75), colour = "red") +
-  annotation_raster(mccon, xmin = 1925, xmax = 1950, ymin = 2000, ymax = 4000) +
-  annotation_raster(xfiles, xmin = 1975, xmax = 2000, ymin = 2000, ymax = 4000)
+  geom_col(fill = "#5cc5f2") + 
+  geom_vline(data = image_df, aes(xintercept = date), colour = "red") + 
+  scale_x_date(limits = c(lubridate::dmy(01011925), NA)) +
+  scale_y_continuous(expand = c(0,0)) +
+  theme(axis.line = element_blank(), 
+        axis.ticks = element_line(colour = "darkturquoise", linetype = "blank"),
+        panel.grid = element_line(linetype = "blank"),
+        panel.grid.major.x = element_line(linetype = "solid", size = 4, colour = "#474747"), 
+        axis.text = element_text(size = 16, colour = "whitesmoke"), 
+        axis.title = element_text(colour = "whitesmoke"),
+        panel.background = element_rect(fill = NA), 
+        plot.background = element_rect(fill = "gray21"), 
+        text = element_text(family = "Consolas"))
+
+baseplot +
+  annotation_custom(mccon, xmax = lubridate::dmy(01011940), ymin = 2000, ymax = 4000)
   
 
 ```
