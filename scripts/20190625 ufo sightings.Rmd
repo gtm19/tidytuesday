@@ -1,0 +1,33 @@
+---
+title: "UFO Sightings"
+author: "Gareth"
+date: "25/06/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+library(tidyverse)
+library(png)
+
+ufo_sightings <- 
+  readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-06-25/ufo_sightings.csv") %>% 
+  mutate_at(vars(starts_with("date")), as.Date, format = "%m/%d/%Y")
+
+mccon <- magick::image_read("https://upload.wikimedia.org/wikipedia/en/8/86/McMinnville_UFO_Photograph.jpg")
+
+ufo_sightings %>% 
+  mutate(ufo_shape = fct_lump(str_to_title(ufo_shape), 8)) %>% 
+  group_by(year = lubridate::year(date_time), ufo_shape) %>% 
+  summarise(sightings = n()) %>% 
+  ggplot(aes(year, sightings)) + 
+  geom_col() + 
+  geom_vline(xintercept = c(1950.5, 1993.75), colour = "red") +
+  annotation_raster(mccon, xmin = 1925, xmax = 1950, ymin = 2000, ymax = 4000)
+
+```
+
