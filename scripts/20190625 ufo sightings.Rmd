@@ -53,7 +53,8 @@ baseplot <-
         text = element_text(family = "Consolas"))
 
 baseplot +
-  annotation_custom(mccon, xmax = lubridate::dmy(01011940), ymin = 2000, ymax = 4000)
+  annotation_custom(mccon, xmin = lubridate::dmy(01011940), xmax = lubridate::dmy(01011960), ymin = 4000, ymax = 6000)
+  
   
 
 ```
