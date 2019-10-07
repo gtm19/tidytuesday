@@ -1,0 +1,29 @@
+---
+title: "Powerlifting"
+author: "Gareth"
+date: "07/10/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+
+```
+
+```{r data}
+ipf_lifts <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-10-08/ipf_lifts.csv")
+```
+
+```{r}
+ipf_lifts %>% 
+  map(~scales::percent(sum(is.na(.))/length(.)))
+
+ipf_lifts %>% 
+  ggplot(aes(best3squat_kg)) +
+  geom_histogram()
+
+
+```
+
