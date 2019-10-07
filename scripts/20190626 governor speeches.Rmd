@@ -1,0 +1,70 @@
+---
+title: "State Governers' Speeches"
+author: "Gareth Maddock"
+date: "26/06/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This is an analysis of the text of each US Governers' 2019 annual addresses, as included in _Data is Plural_ on 26 June 2019. The data was collated by _FiveThirtyEight_, and tweaked by me prior to analysing.
+
+## Read in data and add full speech text
+
+```{r load packages, message=FALSE}
+library(tidyverse)
+library(lubridate)
+library(readxl)
+library(janitor)
+library(scales)
+library(here)
+
+library(tidytext)
+```
+
+
+```{r read data}
+txt_location <- "https://raw.githubusercontent.com/fivethirtyeight/data/master/state-of-the-state/speeches/"
+
+speeches_df <- 
+  read_csv("https://raw.githubusercontent.com/fivethirtyeight/data/master/state-of-the-state/index.csv") %>%
+  # Add full text of speech as a variable
+  mutate(full_text = map_chr(filename, ~ paste0(read_lines(paste0(txt_location, .)), collapse = " ")))
+```
+
+## Using `tidytext`
+
+Firstly, we break the speeches into individual words, and remove stop words.
+
+```{r}
+speeches_unnested <-
+  speeches_df %>% 
+  unnest_tokens(word, full_text) %>% 
+  anti_join(tidytext::stop_words)
+```
+
+
+Counts of Top 15 words 
+
+```{r}
+speeches_unnested %>% 
+  add_count(word) %>%
+  mutate(word_rank = dense_rank(-n)) %>% 
+  filter(word_rank <= 15) %>% 
+  group_by(word, party) %>% 
+  count() %>% 
+  ggplot(aes(word, n, fill = party)) + 
+  geom_col(position = "dodge") +
+  scale_fill_manual(values = c("D" = "blue", "R" = "red"))
+```
+
+```{r}
+speeches_df %>% 
+  mutate(length = map_dbl(full_text, ~length(unlist(str_split(., " "))))) %>% 
+  ggplot(aes(party, length, fill = party)) + 
+  geom_boxplot() +
+  scale_fill_manual(values = c("D" = "blue", "R" = "red"))
+```
+
