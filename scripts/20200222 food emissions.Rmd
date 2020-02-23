@@ -1,0 +1,62 @@
+---
+title: "Food Consumption"
+author: "Gareth"
+date: "22/02/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(sf)
+```
+
+## Loading Data
+
+```{r data}
+
+food_categories <-
+  list("Animal" = c("Beef",
+                    "Lamb & Goat",
+                    "Pork",
+                    "Poultry",
+                    "Fish",
+                    "Eggs",
+                    "Milk - inc. cheese"),
+       "Non Animal" = c("Nuts inc. Peanut Butter",
+                        "Rice",
+                        "Soybeans",
+                        "Wheat and Wheat Products"))
+
+
+food_consumption <- 
+  readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-18/food_consumption.csv') %>% 
+  mutate(food_category = factor(food_category, unlist(food_categories)),
+         animality = fct_collapse(food_category, !!!food_categories))
+
+
+```
+
+```{r}
+world <-
+  rnaturalearth::ne_countries(returnclass = "sf")
+```
+
+```{r}
+
+setdiff(food_consumption$country, world$name)
+
+```
+
+
+```{r}
+
+food_consumption %>%
+  group_by(country, animality) %>% 
+  summarise_at(vars(co2_emmission), sum, na.rm = TRUE)
+
+```
+
